@@ -1,0 +1,12 @@
+﻿body {
+    background-color: #e0f1fb;
+}
+
+#login_id{
+    margin-top:5%;
+    padding:1%;
+}
+
+#login_header{
+    text-align: center;
+}

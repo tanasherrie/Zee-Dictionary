@@ -1,0 +1,43 @@
+﻿body {
+    overflow-x: hidden;
+}
+
+.header {
+    padding: -1px;
+    text-align: center;
+    background: #84b4ce;
+    font-size: 15px;
+}
+
+
+
+.sidenav {
+    margin-top:-5%;
+    background: #84b4ce;
+    height: 100%;
+    width: 220px;
+    text-align:center;
+    position: fixed;
+    color: white;
+}
+
+.adminheader4 {
+    color: #72A1BB;
+}
+
+.adminheader6 {
+    color: #72A1BB;
+}
+
+.table {
+    margin-left: 17.5%;
+}
+
+.welcome {
+    transform: translate(20%, 90%);
+}
+
+.logout {
+    transform: translate(40%, -40%);
+}
+

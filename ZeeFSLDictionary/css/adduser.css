@@ -1,0 +1,32 @@
+﻿body {
+    overflow-x: hidden;
+}
+
+.header {
+    padding: -1px;
+    text-align: center;
+    background: #84b4ce;
+    font-size: 15px;
+}
+
+.sidenav {
+    margin-top: -10%;
+    background: #84b4ce;
+    height: 100%;
+    width: 210px;
+    text-align: center;
+    position: fixed;
+    color: white;
+}
+
+.table {
+    margin-left: 14%;
+}
+
+.welcome {
+    transform: translate(20%, 90%);
+}
+
+.logout {
+    transform: translate(40%, -40%);
+}

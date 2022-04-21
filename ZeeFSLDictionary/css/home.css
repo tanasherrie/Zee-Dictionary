@@ -1,0 +1,80 @@
+﻿body {
+    overflow-x: hidden;
+}
+
+.header {
+    padding:10px;
+    text-align: center;
+    background: #84b4ce;
+    color: white;
+    font-size: 30px;
+}
+
+.dashboard {
+    text-align: center;
+    color: #6791ae;
+    margin-top:1%;
+}
+
+.row{
+    text-align: center;
+}
+
+#module1 {
+    
+    margin-left: 21%;
+    margin-top: 2%;
+    border-style: solid;
+    
+}
+
+#module2 {
+    margin-left: 10%;
+    margin-top:2%;
+    border-style: solid;
+}
+
+#module3 {
+    margin-left: 21%;
+    margin-top: 5%;
+    border-style: solid;
+}
+
+#module4 {
+    margin-left: 10%;
+    margin-top: 5%;
+    border-style: solid;
+    padding: 1px;
+}
+
+.learnIcons{
+    height:50px;
+    width: 50px;
+}
+
+.learnLink{
+    text-decoration: none;
+    color: black;
+}
+
+.favbutton {
+    border-radius: 12px;
+    background-color: #BAD5F4;
+    font-size: 30px;
+}
+
+.favword {
+    border-radius: 12px;
+    background-color: #BAD5F4;
+    font-size: 30px;
+    width: 40%;
+    margin-left:20%;
+    margin-top: 2%;
+}
+
+.addedfavs{
+    text-align:center;
+    margin-top:2%;
+}
+
+
