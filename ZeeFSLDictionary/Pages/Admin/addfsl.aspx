@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
     <link href="../../css/adduser.css" rel="stylesheet"/>
@@ -54,34 +54,36 @@
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <form>
+      
+                      
                         <div class="modal-body">
                       
                           <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Enter sign name"/>
+                            <asp:Label Text="Name" runat="server"/>
+                            <asp:TextBox ID="name" runat="server" placeholder="Enter sign name"></asp:TextBox>
                           </div>
                           <div class="form-group">
-                            <label for="description">Description</label>
-                            <input type="text" class="form-control" id="description" placeholder="Enter sign description"/>
+                            <asp:Label Text="Description" runat="server"/>
+                            <asp:TextBox ID="description" runat="server" placeholder="Enter sign description"></asp:TextBox>
                           </div>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="customFile"/>
-                                <label class="custom-file-label" for="customFile">Choose file</label>
+                                <asp:Label Text="Upload Sign" runat="server"/>
+                                <asp:FileUpload ID="fslFile" runat="server" />
+                                
                              </div>
                         </div>
 
                         <div class="modal-footer border-top-0 d-flex justify-content-center">
-                          <button type="submit" class="btn btn-success">Add Sign</button>
+                          <asp:Button class="btn btn-success" ID="addSign" runat="server" Text="Add Sign" OnClick="addSign_Click"/>
                           <button type="submit" class="btn btn-danger">Cancel</button>
                         </div>
-                      </form>
-                    </div>
+                       
+                   
                   </div>
                 </div>
             </div>
         </div>
-            
+      
        
 
 
@@ -97,20 +99,23 @@
         </div>
 
         <br />
-        <table class="table">
-           <thead>
-              <tr>
-                <th width="6%">Sign GIF</th>
-                <th width="6%">Name</th>
-                <th width="6%">Description</th>
-                <th width="6%">Date Updated</th>
-                <th width="10%">Action</th>
-              </tr>
-            </thead>
-        </table>
+        <!--
+        <div class="col-lg-8" style="margin-top:1%">
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False">
+                <Columns>
+                    <asp:TemplateField HeaderText="Sign GIF"></asp:TemplateField>
+                    <asp:BoundField DataField="name" HeaderText="Name" />
+                    <asp:BoundField DataField="description" HeaderText="Description" />
+                    <asp:BoundField DataField="date_updated" HeaderText="Date Updated" />
+                </Columns>
+            </asp:GridView>
+        </div>!-->
 
        
     </form>
+
+       
+    
    
 </body>
 </html>

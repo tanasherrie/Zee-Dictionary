@@ -31,5 +31,11 @@
         <i class="fas fa-search"></i>
       </span>
     </div>
+
+    <div class="row" style="margin-left:13%; margin-top:4%">
+        <div class="col-sm-3" style="border:1px solid #000; ">col-sm</div>
+        <div class="col-sm-3" style="border:1px solid #000; margin-left:5%">col-sm</div>
+        <div class="col-sm-3" style="border:1px solid #000; margin-left:5%">col-sm</div>
+    </div>
 </body>
 </html>
