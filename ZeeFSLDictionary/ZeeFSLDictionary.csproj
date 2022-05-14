@@ -1919,6 +1919,8 @@
     <Content Include="Pages\Admin\hearingusers.aspx" />
     <Content Include="Pages\Admin\adminusers.aspx" />
     <Content Include="Pages\Admin\userprogress.aspx" />
+    <Content Include="Pages\grammar_deaf.aspx" />
+    <Content Include="Pages\grammar_hearing.aspx" />
     <Content Include="Pages\Login.aspx" />
     <Content Include="Pages\SignUp.aspx" />
     <Content Include="Pages\home.aspx" />
@@ -1988,6 +1990,20 @@
     </Compile>
     <Compile Include="Pages\Admin\userprogress.aspx.designer.cs">
       <DependentUpon>userprogress.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\grammar_deaf.aspx.cs">
+      <DependentUpon>grammar_deaf.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\grammar_deaf.aspx.designer.cs">
+      <DependentUpon>grammar_deaf.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\grammar_hearing.aspx.cs">
+      <DependentUpon>grammar_hearing.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\grammar_hearing.aspx.designer.cs">
+      <DependentUpon>grammar_hearing.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>

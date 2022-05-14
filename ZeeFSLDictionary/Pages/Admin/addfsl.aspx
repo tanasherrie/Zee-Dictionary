@@ -57,7 +57,6 @@
       
                       
                         <div class="modal-body">
-                      
                           <div class="form-group">
                             <asp:Label Text="Name" runat="server"/>
                             <asp:TextBox ID="name" runat="server" placeholder="Enter sign name"></asp:TextBox>
@@ -68,8 +67,7 @@
                           </div>
                             <div class="custom-file">
                                 <asp:Label Text="Upload Sign" runat="server"/>
-                                <asp:FileUpload ID="fslFile" runat="server" />
-                                
+                                <asp:FileUpload ID="fslFile" runat="server" />=
                              </div>
                         </div>
 
@@ -77,12 +75,13 @@
                           <asp:Button class="btn btn-success" ID="addSign" runat="server" Text="Add Sign" OnClick="addSign_Click"/>
                           <button type="submit" class="btn btn-danger">Cancel</button>
                         </div>
-                       
                    
                   </div>
                 </div>
             </div>
         </div>
+
+      </div>
       
        
 

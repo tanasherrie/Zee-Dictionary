@@ -15,7 +15,7 @@ namespace ZeeFSLDictionary.Pages.Admin
     {
         private MySqlConnection DBConnection()
         {
-            string connect = "datasource=127.0.0.1; username=root; password=; database=zeetest";
+            string connect = "datasource=127.0.0.1; username=root; password=; database=zee_db";
 
             MySqlConnection db = new MySqlConnection(connect);
 
@@ -43,7 +43,6 @@ namespace ZeeFSLDictionary.Pages.Admin
             DataList.DataBind();
         }*/
 
-
         protected void Page_Load(object sender, EventArgs e)
         {
             //DBConnection();
@@ -57,7 +56,6 @@ namespace ZeeFSLDictionary.Pages.Admin
                 fslFile.SaveAs(HttpContext.Current.Request.PhysicalApplicationPath + "/assets/gif/" + fslFile.FileName);
                 path = fslFile.FileName;
 
-
             DateTime d = DateTime.Now;
 
             MySqlConnection con = DBConnection();
@@ -68,7 +66,7 @@ namespace ZeeFSLDictionary.Pages.Admin
             cmd.Parameters.AddWithValue("@gif", path);
             cmd.Parameters.AddWithValue("@name", name.Text);
             cmd.Parameters.AddWithValue("@description", description.Text);
-            cmd.Parameters.AddWithValue("@date", d);
+            cmd.Parameters.AddWithValue("@date", d); 
 
             int i = cmd.ExecuteNonQuery();
 
