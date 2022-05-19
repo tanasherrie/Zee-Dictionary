@@ -16,7 +16,32 @@
     <%--popper js--%>
     <script src="bootstrap/js/popper.min.js"></script>
     <%--bootstrap js--%>
-    <script src="bootstrap/js/bootstrap.min.js"></script>   
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
+    <%--<script>
+        $(document).ready(function () {
+            SearchText();
+        });
+        function SearchText() {
+            $("#word_search").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "grmmar_hearing.aspx/doAutoComplete",
+                        data: "{'userInput':'" + document.getElementById('word_search').value + "'}",
+                        dataType: "json",
+                        success: function (data) {
+                            response(data.d);
+                        },
+                        error: function (result) {
+                            alert("No Match");
+                        }
+                    });
+                }
+            });
+        }
+    </script>--%>
 </head>
 <body>
     <div class="header">
@@ -25,17 +50,28 @@
         
     </div>
 
-    <div class="container input-group rounded" style="width:50%; margin-top:2%; margin-left:25%">
+    <div class="input-group rounded" style="width:50%; margin-top:2%; margin-left:25%; margin-bottom:10%">
         <form id="search_gh" runat="server">
             <%--<asp:TextBox ID="word_search" runat="server" ToolTip="enter word to display FSL equivalent" placeholder="Enter Word"
                         class="form rounded" Width="600" BorderWidth="3" BorderColor="#99ccff" OnTextChanged="doAutoComplete"></asp:TextBox>--%>
             <%--<asp:Button ID="doSearch" runat="server" Text="Search" OnClick="SearchBtn_Clicked" />--%>
             <asp:TextBox ID="word_search" runat="server" ToolTip="enter word to display FSL equivalent" placeholder="Enter Word"
-                        class="form rounded" Width="600" BorderWidth="3" BorderColor="#99ccff" OnTextChanged="doAutoComplete"></asp:TextBox>
-            <asp:Button ID="doSearch" runat="server" Text="Search" BackColor="#77a5f9" ForeColor="White" BorderColor="#77a5f9"
-                        />
+                        class="form rounded" Width="180%" BorderWidth="3" BorderColor="#99ccff" OnTextChanged="doAutoComplete"></asp:TextBox>
+            <%--<asp:Button ID="doSearch" runat="server" Text="Search" BackColor="#77a5f9" ForeColor="White" BorderColor="#77a5f9"
+                        />--%>
         </form>
     </div>
+
+    <div class="container" margin-top="40">
+        <asp:Table ID="resultDisplay" runat="server"
+                    Font-Size="Larger" BackColor="Snow" CellSpacing="10" CellPadding="15">
+            <asp:TableHeaderRow runat="server">
+                <asp:TableHeaderCell>Name</asp:TableHeaderCell>
+                <asp:TableHeaderCell HorizontalAlign="Center" VerticalAlign="Middle">GIF</asp:TableHeaderCell>
+            </asp:TableHeaderRow>
+        </asp:Table>
+    </div>
+   
     
     <%--<div class="input-group rounded" style="width:50%; margin-top:2%; margin-left:25%">
       <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />

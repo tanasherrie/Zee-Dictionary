@@ -1,0 +1,5 @@
+C:\Users\Eque Daculan\source\repos\Zee-Dictionary\obj\Debug\net6.0\Zee-Dictionary.csproj.AssemblyReference.cache
+C:\Users\Eque Daculan\source\repos\Zee-Dictionary\obj\Debug\net6.0\Zee-Dictionary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Eque Daculan\source\repos\Zee-Dictionary\obj\Debug\net6.0\Zee-Dictionary.AssemblyInfoInputs.cache
+C:\Users\Eque Daculan\source\repos\Zee-Dictionary\obj\Debug\net6.0\Zee-Dictionary.AssemblyInfo.cs
+C:\Users\Eque Daculan\source\repos\Zee-Dictionary\obj\Debug\net6.0\Zee-Dictionary.csproj.CoreCompileInputs.cache

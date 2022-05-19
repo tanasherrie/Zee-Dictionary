@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using System.Web.Services;
 
 namespace ZeeFSLDictionary.Pages
 {
-    public partial class grammar_hearing : System.Web.UI.Page
+    public partial class grammar_hearing : Page
     {
         private MySqlConnection DBConnection()
         {
@@ -34,8 +36,9 @@ namespace ZeeFSLDictionary.Pages
             //MySqlConnection con = DBConnection();
         }
 
-        public void KMPSearch(List<string> DatabaseEntries, string uInput)
+        public List<string> KMPSearch(List<string> DatabaseEntries, string uInput)
         {
+            List<string> retVal = new List<string>();
             int entryCount = DatabaseEntries.Count;
             int i, j, k;
             int inpLength = uInput.Length;
@@ -62,6 +65,7 @@ namespace ZeeFSLDictionary.Pages
                     if(j == k)
                     {
                         Console.WriteLine("Found pattern at index -" + (j - k));
+                        retVal.Add(dbEntry);
                         k = lps[k - 1]; 
                     }
 
@@ -76,11 +80,14 @@ namespace ZeeFSLDictionary.Pages
                         }
                         else
                         {
-                            j = j + 1;
+                            j++;
+                            Console.WriteLine("pattern not found");
                         }
                     }
                 }
             }
+
+            return retVal;
         }
 
         public void computeLPSarray(string uInput, int inpLength, int[] lps)
@@ -121,8 +128,10 @@ namespace ZeeFSLDictionary.Pages
             //{
             //    con.Open();
             //    System.Diagnostics.Debug.WriteLine("DB Connected");
+            List<string> retvalDisplay;
             List<string> DatabaseEntries = new List<string>();
             string uInput = word_search.Text;
+            //string uInput = userInput;
 
             string sql = "select * from entries";
             MySqlCommand comm = new MySqlCommand(sql, con);
@@ -133,11 +142,16 @@ namespace ZeeFSLDictionary.Pages
             {
                 DatabaseEntries.Add(msdr["word"].ToString());
             }
+            msdr.Close();
+
+            retvalDisplay = KMPSearch(DatabaseEntries, uInput);
             //}
             //catch (Exception error)
             //{
             //    System.Diagnostics.Debug.WriteLine(error.Message);
             //}
+
+            //return retvalDisplay;
         }
 
         public void SearchBtn_Clicked(object sender, EventArgs e)
