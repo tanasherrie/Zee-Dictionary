@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Text;
 using System.Web.UI.WebControls;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using System.Web.Services;
 
 namespace ZeeFSLDictionary.Pages
 {
-    public partial class grammar_hearing : System.Web.UI.Page
+    public partial class grammar_hearing : Page
     {
         private MySqlConnection DBConnection()
         {
@@ -34,53 +39,107 @@ namespace ZeeFSLDictionary.Pages
             //MySqlConnection con = DBConnection();
         }
 
-        public void KMPSearch(List<string> DatabaseEntries, string uInput)
+        public List<string> KMPSearch(List<dbEntries> DatabaseEntries, string uInput)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            Thread.Sleep(5000);
+
+            List<string> retVal = new List<string>();
             int entryCount = DatabaseEntries.Count;
             int i, j, k;
             int inpLength = uInput.Length;
             int[] lps;
-            
-            for(i=0; i<entryCount; i++){
-                string dbEntry = DatabaseEntries[i];
-                int dbLength = dbEntry.Length;
-                //lps -> Longest Proper Suffix
-                lps = new int[inpLength];
-                j = 0;
 
-                //method for prepocessing and calculating the LPS array
+            foreach(var ent in DatabaseEntries)
+            {
+                string dbEntry = ent.itemName;
+                int dbLength = dbEntry.Length;
+                lps = new int[inpLength];
+                j = 0; //index for uinput
+
                 computeLPSarray(uInput, inpLength, lps);
                 k = 0; //index for the db input
 
-                while(j < dbLength)
+                while (j < dbLength)
                 {
-                    if(dbEntry[j] == uInput[k])
+                    if (dbEntry[j] == uInput[k])
                     {
                         j++;
                         k++;
                     }
-                    if(j == k)
+                    if (j == inpLength)
                     {
-                        Console.WriteLine("Found pattern at index -" + (j - k));
-                        k = lps[k - 1]; 
+                        Console.WriteLine("Found pattern at index -" + (k - j));
+                        //retVal.Add(dbEntry);
+                        //var sb = new StringBuilder();
+                        //sb.Append(@"
+                        
+                        //")
+                        j = lps[j - 1];
                     }
 
-                    //mismatch after k matches scenario
-                    else if(j<dbLength && uInput[k] != dbEntry[j])
+                    else if (k < dbLength && uInput[j] != dbEntry[k])
                     {
-                        // Do not match lps[0..lps[j-1]] characters, 
-                        // they will match anyway
-                        if (k != 0)
+                        if (j != 0)
                         {
-                            k = lps[k - 1];
+                            j = lps[j - 1];
                         }
                         else
                         {
-                            j = j + 1;
+                            k++;
+                            Console.WriteLine("pattern not found");
                         }
                     }
                 }
             }
+            stopwatch.Stop();
+            Console.WriteLine("Function ran for {0} ms", stopwatch.ElapsedMilliseconds);
+            
+            //for(i=0; i<entryCount; i++){
+            //    string dbEntry = DatabaseEntries.item[i];
+            //    int dbLength = dbEntry.Length;
+            //    //lps -> Longest Proper Suffix
+            //    lps = new int[inpLength];
+            //    j = 0;
+
+            //    //method for prepocessing and calculating the LPS array
+            //    computeLPSarray(uInput, inpLength, lps);
+            //    k = 0; //index for the db input
+
+            //    while(j < dbLength)
+            //    {
+            //        if(dbEntry[j] == uInput[k])
+            //        {
+            //            j++;
+            //            k++;
+            //        }
+            //        if(j == k)
+            //        {
+            //            Console.WriteLine("Found pattern at index -" + (j - k));
+            //            retVal.Add(dbEntry);
+            //            k = lps[k - 1]; 
+            //        }
+
+            //        //mismatch after k matches scenario
+            //        else if(j<dbLength && uInput[k] != dbEntry[j])
+            //        {
+            //            // Do not match lps[0..lps[j-1]] characters, 
+            //            // they will match anyway
+            //            if (k != 0)
+            //            {
+            //                k = lps[k - 1];
+            //            }
+            //            else
+            //            {
+            //                j++;
+            //                Console.WriteLine("pattern not found");
+            //            }
+            //        }
+            //    }
+            //}
+
+            return retVal;
         }
 
         public void computeLPSarray(string uInput, int inpLength, int[] lps)
@@ -121,8 +180,12 @@ namespace ZeeFSLDictionary.Pages
             //{
             //    con.Open();
             //    System.Diagnostics.Debug.WriteLine("DB Connected");
-            List<string> DatabaseEntries = new List<string>();
+
+            List<dbEntries> toDisplay = new List<dbEntries>();
+            List<string> retvalDisplay;
+            //List<string> DatabaseEntries = new List<string>();
             string uInput = word_search.Text;
+            //string uInput = userInput;
 
             string sql = "select * from entries";
             MySqlCommand comm = new MySqlCommand(sql, con);
@@ -131,13 +194,29 @@ namespace ZeeFSLDictionary.Pages
 
             while (msdr.Read())
             {
-                DatabaseEntries.Add(msdr["word"].ToString());
+                //toDisplay.Add(msdr["word"].ToString());
+                toDisplay.Add(new dbEntries
+                {
+                    itemName = msdr["name"].ToString(),
+                    itemDescription = msdr["description"].ToString(),
+                    itemSource = msdr["sign_gif"].ToString()
+                });
             }
+            msdr.Close();
+
+            retvalDisplay = KMPSearch(toDisplay, uInput);
             //}
             //catch (Exception error)
             //{
             //    System.Diagnostics.Debug.WriteLine(error.Message);
             //}
+
+            //return retvalDisplay;
+        }
+
+        public void displaySearchResults (List<string> retvalDisplay)
+        {
+
         }
 
         public void SearchBtn_Clicked(object sender, EventArgs e)
@@ -146,5 +225,12 @@ namespace ZeeFSLDictionary.Pages
 
 
         }
+    }
+
+    public class dbEntries
+    {
+        public string itemName;
+        public string itemSource;
+        public string itemDescription;
     }
 }
