@@ -218,3 +218,4 @@ C:\Users\Eque Daculan\source\repos\Zee-Dictionary\ZeeFSLDictionary\obj\Debug\Zee
 C:\Users\Eque Daculan\source\repos\Zee-Dictionary\ZeeFSLDictionary\obj\Debug\ZeeFSLDictionary.csproj.CopyComplete
 C:\Users\Eque Daculan\source\repos\Zee-Dictionary\ZeeFSLDictionary\obj\Debug\ZeeFSLDictionary.dll
 C:\Users\Eque Daculan\source\repos\Zee-Dictionary\ZeeFSLDictionary\obj\Debug\ZeeFSLDictionary.pdb
+C:\Users\Eque Daculan\source\repos\Zee-Dictionary\ZeeFSLDictionary\obj\Debug\ZeeFSLDictionary.csproj.AssemblyReference.cache

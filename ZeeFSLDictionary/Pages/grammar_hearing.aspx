@@ -69,6 +69,11 @@
                 <asp:TableHeaderCell>Name</asp:TableHeaderCell>
                 <asp:TableHeaderCell HorizontalAlign="Center" VerticalAlign="Middle">GIF</asp:TableHeaderCell>
             </asp:TableHeaderRow>
+            <asp:TableRow>
+                <asp:TableCell ID="cellName"></asp:TableCell>
+                <asp:TableCell ID="cellDescription"></asp:TableCell>
+                <asp:TableCell ID="cellGIF"></asp:TableCell>
+            </asp:TableRow>
         </asp:Table>
     </div>
    
