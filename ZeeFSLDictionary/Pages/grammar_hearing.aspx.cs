@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
+using System.Data;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Threading;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.UI;
 using System.Text;
@@ -39,48 +46,84 @@ namespace ZeeFSLDictionary.Pages
             //MySqlConnection con = DBConnection();
         }
 
-        public List<string> KMPSearch(List<dbEntries> DatabaseEntries, string uInput)
+        public void KMPSearch(string uInput, List<dbEntries> DatabaseEntries)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             Thread.Sleep(5000);
 
-            List<string> retVal = new List<string>();
-            int entryCount = DatabaseEntries.Count;
-            int i, j, k;
+            //List<string> retVal = new List<string>();
+            //int entryCount = DatabaseEntries.Count;
+            int dbCount=0, hasFound=0, j, k;
             int inpLength = uInput.Length;
+            Debug.WriteLine("input '"+uInput+"' length is " + inpLength);
             int[] lps;
+            lps = new int[inpLength];
+            dbEntries todisplay = new dbEntries();
+
 
             foreach(var ent in DatabaseEntries)
             {
+                dbCount++;
                 string dbEntry = ent.itemName;
                 int dbLength = dbEntry.Length;
-                lps = new int[inpLength];
+                Debug.WriteLine("db entry '"+dbEntry+"' length is " + dbLength);
+                
                 j = 0; //index for uinput
 
                 computeLPSarray(uInput, inpLength, lps);
                 k = 0; //index for the db input
 
-                while (j < dbLength)
+                //var sb = new StringBuilder();
+                //sb.Append(@"
+                //<table class='table table-hover table-vcenter'>
+                //<tr>
+                //<th>name</th>
+                //<th>description</th>
+                //<th>gif</th>
+                //</tr>
+                //");
+
+                while (k < dbLength)
                 {
-                    if (dbEntry[j] == uInput[k])
+                    //if (hasFound == 0)
+                    //{
+                    //    sb.Append("<tr><td colspan='5'>No record</td></tr>");
+                    //}
+                    //else
+                    //{
+                    //    sb.Append($@"
+                    //        <tr>
+                    //        <td>{ent.itemName}</td>
+                    //        <td>{ent.itemDescription}</td>
+                    //        <td><img src=""{ent.itemSource}"" alt=""gif_image""/></td>
+                    //    ");
+                    //}
+                    Debug.WriteLine("j is  " + j+" and k is "+k);
+                    if (uInput[j] == dbEntry[k])
                     {
                         j++;
                         k++;
                     }
                     if (j == inpLength)
                     {
-                        Console.WriteLine("Found pattern at index -" + (k - j));
-                        //retVal.Add(dbEntry);
-                        //var sb = new StringBuilder();
-                        //sb.Append(@"
-                        
-                        //")
+                        hasFound++;
+                        Debug.WriteLine("Found pattern at index -" + (k - j));
+
+                        //MySqlConnection conn = DBConnection();
+                        //MySqlCommand cmd = new MySqlCommand("select * from fsl where name=" + dbEntry, conn);
+                        //MySqlDataAdapter adp = new MySqlDataAdapter(cmd);
+                        //DataSet ds = new DataSet();
+                        //adp.Fill(ds);
+                        //srchResults.DataSource = ds;
+                        //srchResults.DataBind();
+
                         j = lps[j - 1];
                     }
 
                     else if (k < dbLength && uInput[j] != dbEntry[k])
                     {
+                        Debug.WriteLine("input letter '" + uInput[j] + "' not eq " + dbEntry[k]);
                         if (j != 0)
                         {
                             j = lps[j - 1];
@@ -88,59 +131,212 @@ namespace ZeeFSLDictionary.Pages
                         else
                         {
                             k++;
-                            Console.WriteLine("pattern not found");
+                            //Console.WriteLine("pattern not found");
+                            Debug.WriteLine("pattern not found");
                         }
                     }
                 }
             }
             stopwatch.Stop();
-            Console.WriteLine("Function ran for {0} ms", stopwatch.ElapsedMilliseconds);
-            
-            //for(i=0; i<entryCount; i++){
-            //    string dbEntry = DatabaseEntries.item[i];
-            //    int dbLength = dbEntry.Length;
-            //    //lps -> Longest Proper Suffix
-            //    lps = new int[inpLength];
-            //    j = 0;
+            Debug.WriteLine("found pattern " + hasFound + " times in "+dbCount+" db entries");
+            Debug.WriteLine("Function ran for {0} ms", stopwatch.ElapsedMilliseconds);
+        }
 
-            //    //method for prepocessing and calculating the LPS array
-            //    computeLPSarray(uInput, inpLength, lps);
-            //    k = 0; //index for the db input
+        public void RabinKarp(string uInput, List<dbEntries> DatabaseEntries)
+        {
 
-            //    while(j < dbLength)
-            //    {
-            //        if(dbEntry[j] == uInput[k])
-            //        {
-            //            j++;
-            //            k++;
-            //        }
-            //        if(j == k)
-            //        {
-            //            Console.WriteLine("Found pattern at index -" + (j - k));
-            //            retVal.Add(dbEntry);
-            //            k = lps[k - 1]; 
-            //        }
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            Thread.Sleep(5000);
 
-            //        //mismatch after k matches scenario
-            //        else if(j<dbLength && uInput[k] != dbEntry[j])
-            //        {
-            //            // Do not match lps[0..lps[j-1]] characters, 
-            //            // they will match anyway
-            //            if (k != 0)
-            //            {
-            //                k = lps[k - 1];
-            //            }
-            //            else
-            //            {
-            //                j++;
-            //                Console.WriteLine("pattern not found");
-            //            }
-            //        }
-            //    }
+            int dbCount = 0;
+            double pVal, tVal, exp; //sums
+            int ctr, x, y, m, conv, last;//indices
+
+
+            foreach (var ent in DatabaseEntries)
+            {
+                dbCount++;
+                string dbEntry = ent.itemName;
+                int dbLength = dbEntry.Length;
+               // Debug.WriteLine("db entry '" + dbEntry + "' length is " + dbLength);
+
+
+                //#1 Get hash of pattern (user input)
+                exp = 0;
+                pVal = 0;
+                for (ctr = 0, m = 1; ctr < uInput.Length; ctr++, m++)
+                {
+                    exp = Math.Pow(26, (double)uInput.Length - (double)m);
+                    conv = ((int)uInput[ctr]) - 64;
+                    exp *= Convert.ToDouble(conv);
+                    pVal += exp;
+                }
+                //Console.WriteLine(pVal);
+
+                //#2 get hash value in txt
+                last = dbEntry.Length - uInput.Length;
+                for (x = 0, tVal = 0; x <= last && tVal != pVal; x++)
+                {
+                    tVal = 0;
+                    for (y = x, m = 1; y < x + uInput.Length; y++, m++)
+                    {
+                        exp = Math.Pow(26, (double)uInput.Length - (double)m);
+                        conv = ((int)dbEntry[y]) - 64;
+                        exp *= Convert.ToDouble(conv);
+                        tVal += exp;
+                    }
+                }
+                if(tVal == pVal)
+                {
+                    Debug.WriteLine("Pattern found at index - " + (x - 1));
+                    Debug.WriteLine("found pattern " + dbCount + " db entries");
+                }
+            }
+            //Debug.WriteLine(tVal);
+            //Debug.WriteLine(pVal);
+
+            //if (tVal == pVal)
+            //{
+            //    Debug.WriteLine("Pattern found at index - " + (x - 1));
+            //}
+            //else
+            //{
+            //    Debug.WriteLine("Not found!");
             //}
 
-            return retVal;
+            stopwatch.Stop();
+            //Debug.WriteLine("found pattern " + dbCount + " db entries");
+            Debug.WriteLine("Function ran for {0} ms", stopwatch.ElapsedMilliseconds);
         }
+
+        public void BoyerMoore(string uInput, List<dbEntries> DatabaseEntries)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            Thread.Sleep(5000);
+
+
+            int ctr1, ctr2, lastIndex, y, dbCount = 0, index;
+            bool isFound = false;
+
+            //bmTable bm = new bmTable(); badmatch table
+            char[] c = new char[uInput.Length];
+            int[] val = new int[uInput.Length];
+
+            //initialize the array in the bad match table
+            for (ctr1 = 0; ctr1 < uInput.Length; ctr1++)
+            {
+                c[ctr1] = '*';
+            }
+
+            //#1 put character in the bad match table
+            for (ctr1 = 0, lastIndex = 0; ctr1 < uInput.Length; ctr1++)
+            {
+                for (ctr2 = 0; ctr2 < ctr1 && uInput[ctr1] != c[ctr2]; ctr2++) { }
+                if (ctr2 < ctr1)
+                {
+                    val[ctr2] = ctr1; //put latest index
+                                      //Console.WriteLine($"Index: {ctr2}");
+                                      //Console.WriteLine($"Letter:{c[ctr2]}");
+                }
+                else
+                {
+                    c[ctr1] = uInput[ctr1];
+                    val[ctr1] = ctr1;
+                    lastIndex = ctr1;
+                    //Debug.WriteLine(lastIndex);
+                    //Console.WriteLine($"Index: {val[ctr1]}");
+                    //Console.WriteLine($"Letter:{c[ctr1]}");
+                }
+
+            }
+
+            //Debug.WriteLine(lastIndex);
+            //val[lastIndex] = lastIndex;
+
+            if (lastIndex < uInput.Length)
+            {
+                lastIndex += 1;
+            }
+            Debug.WriteLine(lastIndex);
+
+            //Console.WriteLine($"Index: {val[lastIndex+1]}");
+            //Console.WriteLine($"Letter:{c[lastIndex+1]}");
+
+            //#2 add values using length-index-1
+            for (ctr1 = 0; ctr1 < lastIndex; ctr1++)
+            {
+                index = uInput.Length - val[ctr1] - 1;
+                if (index > 0)
+                {
+                    val[ctr1] = index;
+                }
+                else
+                {
+                    val[ctr1] = uInput.Length;
+                }/*
+                Console.WriteLine($"Index: {ctr1}");
+                Console.WriteLine($"Letter:{c[ctr1]}");
+                Console.WriteLine($"Value:{val[ctr1]}");*/
+            }/*
+            val[lastIndex] = pattern.Length;
+            Console.WriteLine($"Index: {lastIndex}");
+            Console.WriteLine($"Letter:{c[lastIndex]}");
+            Console.WriteLine($"Value:{val[lastIndex]}");*/
+
+            foreach (var ent in DatabaseEntries)
+            {
+                dbCount++;
+                string dbEntry = ent.itemName;
+                int dbLength = dbEntry.Length;
+                //Debug.WriteLine("db entry '" + dbEntry + "' length is " + dbLength);
+
+
+
+                //#3 matching process
+                int s = 0;
+                // Console.WriteLine(index);
+
+                while (s<dbLength && isFound != true)
+                {
+                    for (ctr1 = s + (uInput.Length) - 1, y = dbLength - 1; ctr1 > s && dbEntry[y] == uInput[ctr1]; ctr1--, y--) { } //initial matching
+                   
+                    if (dbEntry[y] == uInput[ctr1])
+                    {
+                        isFound = true;
+                        Debug.WriteLine($"Pattern found at index {s}");
+                        Debug.WriteLine("found pattern " + isFound + " times in " + dbCount + " db entries");
+                       
+                    }
+                    s = dbLength;
+                }
+
+
+                //if (isFound == true)
+                //{
+                //    Debug.WriteLine($"Pattern found at index {index}");
+                //    Debug.WriteLine("found pattern " + isFound + " times in " + dbCount + " db entries");
+                //}
+            
+
+                //if (isFound == true)
+                //{
+                //    Debug.WriteLine($"Pattern found at index {index}");
+                //    Debug.WriteLine("found pattern " + isFound + " times in " + dbCount + " db entries");
+                //}
+                //else
+                //{
+                //    Debug.WriteLine("Pattern not found");
+                //}
+            }
+            stopwatch.Stop();
+            
+            Debug.WriteLine("Function ran for {0} ms", stopwatch.ElapsedMilliseconds);
+
+        }
+
+
 
         public void computeLPSarray(string uInput, int inpLength, int[] lps)
         {
@@ -151,10 +347,10 @@ namespace ZeeFSLDictionary.Pages
             //loop calculates lps[i] for i=1 to m-1
             while (i < inpLength)
             {
-                if (uInput[i] == uInput[inpLength])
+                if (uInput[i] == uInput[lpsLength])
                 {
-                    inpLength++;
-                    lps[i] = inpLength;
+                    lpsLength++;
+                    lps[i] = lpsLength;
                     i++;
                 }
                 else // (pat[i] != pat[len]) 
@@ -172,23 +368,22 @@ namespace ZeeFSLDictionary.Pages
             }
         }
 
-        public void doAutoComplete(object sender, EventArgs e)
+        public void SearchBtn_Clicked(object sender, EventArgs e)
         {
             //this is where the algorithm is also implemented
             MySqlConnection con = DBConnection();
-            //try
-            //{
-            //    con.Open();
-            //    System.Diagnostics.Debug.WriteLine("DB Connected");
-
+ 
             List<dbEntries> toDisplay = new List<dbEntries>();
             List<string> retvalDisplay;
             //List<string> DatabaseEntries = new List<string>();
             string uInput = word_search.Text;
             //string uInput = userInput;
 
-            string sql = "select * from entries";
+            string sql = "select * from fsl";
             MySqlCommand comm = new MySqlCommand(sql, con);
+            //MySqlDataAdapter adp = new MySqlDataAdapter(comm);
+            //DataSet ds = new DataSet();
+            //adp.Fill(ds);
             MySqlDataReader msdr = null;
             msdr = comm.ExecuteReader();
 
@@ -204,7 +399,10 @@ namespace ZeeFSLDictionary.Pages
             }
             msdr.Close();
 
-            retvalDisplay = KMPSearch(toDisplay, uInput);
+            //KMPSearch(uInput, toDisplay);
+            //RabinKarp(uInput, toDisplay);
+            BoyerMoore(uInput, toDisplay);
+            //retvalDisplay = KMPSearch(toDisplay, uInput);
             //}
             //catch (Exception error)
             //{
@@ -219,12 +417,12 @@ namespace ZeeFSLDictionary.Pages
 
         }
 
-        public void SearchBtn_Clicked(object sender, EventArgs e)
-        {
-            MySqlConnection con = DBConnection();
+        //public void SearchBtn_Clicked(object sender, EventArgs e)
+        //{
+        //    MySqlConnection con = DBConnection();
 
 
-        }
+        //}
     }
 
     public class dbEntries

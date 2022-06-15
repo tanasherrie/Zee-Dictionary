@@ -56,14 +56,34 @@
                         class="form rounded" Width="600" BorderWidth="3" BorderColor="#99ccff" OnTextChanged="doAutoComplete"></asp:TextBox>--%>
             <%--<asp:Button ID="doSearch" runat="server" Text="Search" OnClick="SearchBtn_Clicked" />--%>
             <asp:TextBox ID="word_search" runat="server" ToolTip="enter word to display FSL equivalent" placeholder="Enter Word"
-                        class="form rounded" Width="180%" BorderWidth="3" BorderColor="#99ccff" OnTextChanged="doAutoComplete"></asp:TextBox>
+                        class="form rounded" Width="180%" BorderWidth="3" BorderColor="#99ccff"></asp:TextBox>
+            <asp:LinkButton ID="SearchBtn" runat="server" OnClick="SearchBtn_Clicked" CssClass="btn btn-small btn-primary"><i class="fas fa-search"></i></asp:LinkButton>
             <%--<asp:Button ID="doSearch" runat="server" Text="Search" BackColor="#77a5f9" ForeColor="White" BorderColor="#77a5f9"
                         />--%>
+            <asp:Label ID="totRes" runat="server" Font-Bold="true" Text="Total Results:"></asp:Label>
+            <asp:Label ID="lbltotalcount" runat="server" ForeColor="Red" Font-Size="Large"></asp:Label>
+            <!--
+            <asp:GridView ID="srchResults" runat="server">
+                
+                <Columns>
+                    <asp:TemplateField HeaderText="Image Name">
+                        <ItemTemplate>
+                            <asp:Label ID="lbl1" runat="server" Text=''></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Image Name">
+                        <ItemTemplate>
+                            <asp:Label ID="lbl1" runat="server" Text=''></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+            </asp:GridView>!-->
         </form>
     </div>
 
     <div class="container" margin-top="40">
-        <asp:Table ID="resultDisplay" runat="server"
+        
+        <%--<asp:Table ID="resultDisplay" runat="server"
                     Font-Size="Larger" BackColor="Snow" CellSpacing="10" CellPadding="15">
             <asp:TableHeaderRow runat="server">
                 <asp:TableHeaderCell>Name</asp:TableHeaderCell>
@@ -72,9 +92,9 @@
             <asp:TableRow>
                 <asp:TableCell ID="cellName"></asp:TableCell>
                 <asp:TableCell ID="cellDescription"></asp:TableCell>
-                <asp:TableCell ID="cellGIF"></asp:TableCell>
+                <asp:TableCell ID="cellGIF"><asp:Image runat="server" /></asp:TableCell>
             </asp:TableRow>
-        </asp:Table>
+        </asp:Table>--%>
     </div>
    
     

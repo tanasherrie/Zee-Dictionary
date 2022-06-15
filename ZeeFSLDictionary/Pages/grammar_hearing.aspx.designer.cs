@@ -33,39 +33,39 @@ namespace ZeeFSLDictionary.Pages
         protected global::System.Web.UI.WebControls.TextBox word_search;
 
         /// <summary>
-        /// resultDisplay control.
+        /// SearchBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table resultDisplay;
+        protected global::System.Web.UI.WebControls.LinkButton SearchBtn;
 
         /// <summary>
-        /// cellName control.
+        /// totRes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell cellName;
+        protected global::System.Web.UI.WebControls.Label totRes;
 
         /// <summary>
-        /// cellDescription control.
+        /// lbltotalcount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell cellDescription;
+        protected global::System.Web.UI.WebControls.Label lbltotalcount;
 
         /// <summary>
-        /// cellGIF control.
+        /// srchResults control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell cellGIF;
+        protected global::System.Web.UI.WebControls.GridView srchResults;
     }
 }
