@@ -1935,6 +1935,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pages\ImageHandler.ashx.cs">
+      <DependentUpon>ImageHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Admin\adminlogin.aspx.cs">
       <DependentUpon>adminlogin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2137,6 +2140,7 @@
     <Content Include="fontawesome\webfonts\fa-solid-900.woff2" />
     <Content Include="fontawesome\webfonts\fa-v4compatibility.ttf" />
     <Content Include="fontawesome\webfonts\fa-v4compatibility.woff2" />
+    <Content Include="Pages\ImageHandler.ashx" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

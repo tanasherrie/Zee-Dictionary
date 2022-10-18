@@ -32,7 +32,7 @@
       </div>
 
       <div class="col-sm-2" id="module2" style="background-color: #bffcc6;">
-          <img src="../assets/img/grammar.png" style="height:125px; width:125px;"/><br />
+          <img src="../assets/img/grammar_hearing.png" style="height:125px; width:125px;"/><br />
           <a style="text-decoration:none; color:black" href="grammar.aspx">Grammar</a>
       </div>
     </div>

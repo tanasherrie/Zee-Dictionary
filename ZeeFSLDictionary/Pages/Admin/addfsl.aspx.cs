@@ -50,36 +50,50 @@ namespace ZeeFSLDictionary.Pages.Admin
 
         protected void addSign_Click(object sender, EventArgs e)
         {
-            //get filename
-            string path;
-            if (fslFile.HasFile)
-                fslFile.SaveAs(HttpContext.Current.Request.PhysicalApplicationPath + "/assets/gif/" + fslFile.FileName);
-                path = fslFile.FileName;
+            string filename = Path.GetFileName(fslFile.PostedFile.FileName);
+            string contentType = fslFile.PostedFile.ContentType;
 
             DateTime d = DateTime.Now;
 
             MySqlConnection con = DBConnection();
-   
-            MySqlCommand cmd = new MySqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = "INSERT INTO fsl (sign_gif,name,description,date_updated) values (@gif,@name, @description,@date)";
-            cmd.Parameters.AddWithValue("@gif", path);
-            cmd.Parameters.AddWithValue("@name", name.Text);
-            cmd.Parameters.AddWithValue("@description", description.Text);
-            cmd.Parameters.AddWithValue("@date", d); 
+  
 
-            int i = cmd.ExecuteNonQuery();
-
-            if (i > 0)
+            using (Stream fs = fslFile.PostedFile.InputStream)
             {
-                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", "alert('FSL Sign Added!')", true);
-            }
-            else
-            {
-                Console.WriteLine("Error saving to db");
-            }
-        }
+                using (BinaryReader br = new BinaryReader(fs))
+                {
+                    byte[] bytes = br.ReadBytes((Int32)fs.Length);
+                    
+                    using (con)
+                    {
+                        string query = "INSERT INTO fsl (sign_gif,filename,description,type,date_updated) values (@gif,@name, @description,@type,@date)";
+                        using (MySqlCommand cmd = new MySqlCommand(query))
+                        {
+                            cmd.Connection = con;
 
-        
-    }
-}
+                            cmd.Parameters.AddWithValue("@gif", bytes);
+                            cmd.Parameters.AddWithValue("@name", filename);
+                            cmd.Parameters.AddWithValue("@description", description.Text);
+                            cmd.Parameters.AddWithValue("@type", contentType);
+                            cmd.Parameters.AddWithValue("@date", d);
+
+
+
+                            int i = cmd.ExecuteNonQuery();
+
+                            if (i > 0)
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", "alert('FSL Sign Added!')", true);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Error saving to db");
+                            }
+                        }
+
+                    }
+                }
+             }
+         }
+     }       
+ }

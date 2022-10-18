@@ -26,8 +26,10 @@
 
     <div style="text-align:center">
         <br />
-        <h1>Hello</h1>
-        <button type="button" class="btn btn-success" style="transform: translate(400px, 400px);">Next</button>
+        <form runat="server">
+            <asp:Image ID="word_gif" style="margin-top:5%;height:500px;width:500px;" runat="server" />
+           
+        </form>
     </div>
 </body>
 </html>

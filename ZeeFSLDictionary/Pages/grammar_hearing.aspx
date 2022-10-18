@@ -56,29 +56,19 @@
                         class="form rounded" Width="600" BorderWidth="3" BorderColor="#99ccff" OnTextChanged="doAutoComplete"></asp:TextBox>--%>
             <%--<asp:Button ID="doSearch" runat="server" Text="Search" OnClick="SearchBtn_Clicked" />--%>
             <asp:TextBox ID="word_search" runat="server" ToolTip="enter word to display FSL equivalent" placeholder="Enter Word"
-                        class="form rounded" Width="180%" BorderWidth="3" BorderColor="#99ccff"></asp:TextBox>
-            <asp:LinkButton ID="SearchBtn" runat="server" OnClick="SearchBtn_Clicked" CssClass="btn btn-small btn-primary"><i class="fas fa-search"></i></asp:LinkButton>
+                        class="form rounded" Width="80%" BorderWidth="3" BorderColor="#99ccff"></asp:TextBox>
+        
             <%--<asp:Button ID="doSearch" runat="server" Text="Search" BackColor="#77a5f9" ForeColor="White" BorderColor="#77a5f9"
                         />--%>
-            <asp:Label ID="totRes" runat="server" Font-Bold="true" Text="Total Results:"></asp:Label>
-            <asp:Label ID="lbltotalcount" runat="server" ForeColor="Red" Font-Size="Large"></asp:Label>
-            <!--
-            <asp:GridView ID="srchResults" runat="server">
-                
-                <Columns>
-                    <asp:TemplateField HeaderText="Image Name">
-                        <ItemTemplate>
-                            <asp:Label ID="lbl1" runat="server" Text=''></asp:Label>
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Image Name">
-                        <ItemTemplate>
-                            <asp:Label ID="lbl1" runat="server" Text=''></asp:Label>
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                </Columns>
-            </asp:GridView>!-->
+           
+            <asp:LinkButton ID="SearchBtn" OnClick="SearchBtn_Clicked" class="btn btn-success" CssStyle="translate(400px, 400px);margin-right:10%" Text="Display" runat="server" ><i class="fas fa-search"></i></asp:LinkButton>
+            <br />
+            <asp:Image ID="word_gif" style="margin-top:5%;height:500px;width:700px;" runat="server" /><br />
+            <asp:Label ID="word_label" runat="server" Text=""></asp:Label><br />
+            <asp:Label ID="word_desc" runat="server" Text=""></asp:Label>
         </form>
+           
+       
     </div>
 
     <div class="container" margin-top="40">

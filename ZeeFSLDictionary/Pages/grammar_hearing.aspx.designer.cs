@@ -42,30 +42,30 @@ namespace ZeeFSLDictionary.Pages
         protected global::System.Web.UI.WebControls.LinkButton SearchBtn;
 
         /// <summary>
-        /// totRes control.
+        /// word_gif control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label totRes;
+        protected global::System.Web.UI.WebControls.Image word_gif;
 
         /// <summary>
-        /// lbltotalcount control.
+        /// word_label control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbltotalcount;
+        protected global::System.Web.UI.WebControls.Label word_label;
 
         /// <summary>
-        /// srchResults control.
+        /// word_desc control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView srchResults;
+        protected global::System.Web.UI.WebControls.Label word_desc;
     }
 }

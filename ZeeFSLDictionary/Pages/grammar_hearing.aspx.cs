@@ -46,8 +46,9 @@ namespace ZeeFSLDictionary.Pages
             //MySqlConnection con = DBConnection();
         }
 
-        public void KMPSearch(string uInput, List<dbEntries> DatabaseEntries)
+        public int KMPSearch(string uInput, List<dbEntries> DatabaseEntries)
         {
+            int ret=0; 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             Thread.Sleep(5000);
@@ -119,6 +120,7 @@ namespace ZeeFSLDictionary.Pages
                         //srchResults.DataBind();
 
                         j = lps[j - 1];
+                        ret = 1;
                     }
 
                     else if (k < dbLength && uInput[j] != dbEntry[k])
@@ -133,17 +135,26 @@ namespace ZeeFSLDictionary.Pages
                             k++;
                             //Console.WriteLine("pattern not found");
                             Debug.WriteLine("pattern not found");
+                            
                         }
                     }
                 }
             }
+
+            if (hasFound > 0)
+            {
+                ret = 1;
+            }
+
             stopwatch.Stop();
             Debug.WriteLine("found pattern " + hasFound + " times in "+dbCount+" db entries");
             Debug.WriteLine("Function ran for {0} ms", stopwatch.ElapsedMilliseconds);
+            return ret;
         }
 
-        public void RabinKarp(string uInput, List<dbEntries> DatabaseEntries)
+        public int RabinKarp(string uInput, List<dbEntries> DatabaseEntries)
         {
+            int ret = 0; 
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -191,6 +202,7 @@ namespace ZeeFSLDictionary.Pages
                 {
                     Debug.WriteLine("Pattern found at index - " + (x - 1));
                     Debug.WriteLine("found pattern " + dbCount + " db entries");
+                    ret = 1;
                 }
             }
             //Debug.WriteLine(tVal);
@@ -208,10 +220,12 @@ namespace ZeeFSLDictionary.Pages
             stopwatch.Stop();
             //Debug.WriteLine("found pattern " + dbCount + " db entries");
             Debug.WriteLine("Function ran for {0} ms", stopwatch.ElapsedMilliseconds);
+            return ret;
         }
 
-        public void BoyerMoore(string uInput, List<dbEntries> DatabaseEntries)
+        public int BoyerMoore(string uInput, List<dbEntries> DatabaseEntries)
         {
+            int ret = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             Thread.Sleep(5000);
@@ -330,9 +344,16 @@ namespace ZeeFSLDictionary.Pages
                 //    Debug.WriteLine("Pattern not found");
                 //}
             }
+
+            if(isFound == true)
+            {
+                ret = 1;
+            }
+
             stopwatch.Stop();
             
             Debug.WriteLine("Function ran for {0} ms", stopwatch.ElapsedMilliseconds);
+            return ret;
 
         }
 
@@ -368,23 +389,19 @@ namespace ZeeFSLDictionary.Pages
             }
         }
 
-        public void SearchBtn_Clicked(object sender, EventArgs e)
+        public List<dbEntries> fillList()
         {
             //this is where the algorithm is also implemented
             MySqlConnection con = DBConnection();
- 
+
             List<dbEntries> toDisplay = new List<dbEntries>();
-            List<string> retvalDisplay;
-            //List<string> DatabaseEntries = new List<string>();
-            string uInput = word_search.Text;
-            //string uInput = userInput;
+
 
             string sql = "select * from fsl";
             MySqlCommand comm = new MySqlCommand(sql, con);
-            //MySqlDataAdapter adp = new MySqlDataAdapter(comm);
-            //DataSet ds = new DataSet();
-            //adp.Fill(ds);
-            MySqlDataReader msdr = null;
+
+            MySqlDataReader msdr;
+
             msdr = comm.ExecuteReader();
 
             while (msdr.Read())
@@ -397,11 +414,48 @@ namespace ZeeFSLDictionary.Pages
                     itemSource = msdr["sign_gif"].ToString()
                 });
             }
-            msdr.Close();
 
+            return toDisplay;
+            //msdr.Close();
+        }
+
+
+        public void SearchBtn_Clicked(object sender, EventArgs e)
+        {
+            //this is where the algorithm is also implemented
+            List<dbEntries> toDisplay;
+            string uInput = word_search.Text;
+            toDisplay = fillList();
+
+            MySqlConnection con = DBConnection();
+            string query = "SELECT name, description, sign_gif from fsl WHERE name = '" + uInput+ "'";
+            MySqlCommand cmd = new MySqlCommand(query);
+            cmd.Connection = con;
+            
+            //int ret = KMPSearch(uInput, toDisplay);
+            //int ret = RabinKarp(uInput, toDisplay);
+            int ret = BoyerMoore(uInput, toDisplay);
+
+            MySqlDataReader dr = cmd.ExecuteReader();
+
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    byte[] sign_gif = (byte[])dr["sign_gif"];
+                    string gif_file = Convert.ToBase64String(sign_gif, 0, sign_gif.Length);
+                    word_gif.ImageUrl = "data: gif_file/gif;base64," + gif_file;
+                    word_gif.Visible = true;
+                    word_label.Text = dr["name"].ToString();
+                    word_desc.Text = dr["description"].ToString();
+                }
+            }
+
+        }
+            
             //KMPSearch(uInput, toDisplay);
             //RabinKarp(uInput, toDisplay);
-            BoyerMoore(uInput, toDisplay);
+            //BoyerMoore(uInput, toDisplay);
             //retvalDisplay = KMPSearch(toDisplay, uInput);
             //}
             //catch (Exception error)
@@ -410,12 +464,12 @@ namespace ZeeFSLDictionary.Pages
             //}
 
             //return retvalDisplay;
-        }
+    /*
 
         public void displaySearchResults (List<string> retvalDisplay)
         {
 
-        }
+        }*/
 
         //public void SearchBtn_Clicked(object sender, EventArgs e)
         //{
